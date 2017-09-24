@@ -17,90 +17,81 @@ public class ActasNotasAED implements ActaNotas {
 			this.database = new ArrayIndexedList<Calificacion>();
 	}
 	
-	public void ordenarArr() {
-		System.out.println(database.toString());
-		boolean bool = false;
-		String begin;
-		int value = 0;
-		while(bool) {
-			begin = database.get(database.size() - 1 - value).getMatricula();
-			for (int i = 0; i<database.size();i++) {
-				if(begin.compareTo(database.get(i).getMatricula()) >= 0) {
-					database.add(value, database.get(i));
-					value ++;
-				}
+	private int buscarMatricula(String matricula) {
+		int i=0;
+		boolean aux=false;
+		for( i=0;i<database.size()&&aux==false;i++) {
+			if(database.get(i).getMatricula().equals(matricula)) {
+		        aux=true;
+				database.get(i).setNota(nota);
 			}
-			value ++;
 		}
-		System.out.println(database.toString());
+		if(!aux) {return -1;}
+		else{return i;}
 	}
 	
-	/**
-	 * Adds a new calificacion to the database.
-	 * @throws CalificacionAlreadyExistsException
-	 * if a calificacion with the same matricula already existed
-	 * in the database.
-	 */
 	public void addCalificacion(String nombre, String matricula, int nota)
 			throws CalificacionAlreadyExistsException{
-		
+		if(buscarMatricula(matricula)==-1) {
+			Calificacion add = new Calificacion(nombre, matricula, nota);
+			database.add(database.size(), add);
+		}else {
+			throw new CalificacionAlreadyExistsException();
+		}
 	}
-
-	/**
-	 * Modifies the nota for a calificacion with the given matricula
-	 * (there can never be more than calificacion for a given matricula).
-	 * @throws InvalidMatriculaExcepcion if there is no calificacion for
-	 * the specified matricula.
-	 */
+	
 	public void updateNota(String matricula, int nota)
 			throws InvalidMatriculaException{
-		
+		if(buscarMatricula(matricula)==-1) {
+			throw new InvalidMatriculaException(); 
+		}else {
+			database.get(buscarMatricula(matricula)).setNota(nota);
+		}
 	}
 
-	/**
-	 * Deletes the calificacion for the student with the given matricula.
-	 * @throws InvalidMatriculaExcepcion if there is no calificacion for
-	 * the specified matricula.
-	 */
+	
 	public void deleteCalificacion(String matricula)
 			throws InvalidMatriculaException{
-		
+		if(buscarMatricula(matricula)==-1) {
+			throw new InvalidMatriculaException(); 
+		}else {
+			database.remove(database.get(buscarMatricula(matricula)));
+		}
 	}
 
-	/**
-	 * Returns the calificacion for the student with the given matricula.
-	 * @return the calificacion for the student with the given matricula.
-	 * @throws InvalidMatriculaExcepcion if there is no calificacion for
-	 * the specified matricula.
-	 */
+
 	public Calificacion getCalificacion(String matricula)
 			throws InvalidMatriculaException{
-		
+		if(buscarMatricula(matricula)==-1) {
+			throw new InvalidMatriculaException(); 
+		}else {
+			return database.get(buscarMatricula(matricula));
+		}
+	}
+	
+
+	public IndexedList<Calificacion> getCalificaciones(Comparator<Calificacion> cmp){
+		for(int i=0; i<database.size();i++) {
+			for (int j=i+1; j<database.size();j++) {
+				if(cmp.compare(database.get(i), database.get(j)) < 0) {
+					database.add(i, database.get(j));
+				}
+			}
+		}
+		return database;
 	}
 
-	/**
-	 * Returns a SORTED indexed list with the calificaciones in the
-	 * database, where the
-	 * sorting order is given by the Comparator cmp. Note that calificaciones
-	 * should be sorted from smaller to bigger values (using cmp).
-	 * @return a sorted list of the calificacions in the database.
-	 */
-	IndexedList<Calificacion> getCalificaciones(Comparator<Calificacion> cmp);
 
-	/**
-	 * Returns a list with the calificacions that have a nota greater
-	 * or equal to the notaMinima argument.
-	 * Note that there is no requirement that the returned
-	 * list has to be sorted. This method should NOT remove calificaciones
-	 * from the database.
-	 */
 	public IndexedList<Calificacion> getAprobados(int notaMinima){
+		int cont =0;
 		IndexedList<Calificacion> aprobados = new ArrayIndexedList<Calificacion>();
 		for(int i = 0; i< database.size(); i++) {
 			if(database.get(i).getNota() >= notaMinima) {
-				
+				aprobados.add(cont, database.get(i));
+				cont++;
 			}
 		}
+		return aprobados;
 	}
 
 }
