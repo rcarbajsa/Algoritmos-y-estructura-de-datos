@@ -11,20 +11,23 @@ public class ActaNotasAED implements ActaNotas {
 	}
 
 	private int buscarMatricula(String matricula) {
-		int i = 0;
-		boolean aux = false;
-		for (i = 0; i < database.size() && aux == false; i++) {
-			if (database.get(i).getMatricula().equals(matricula)) {
-				aux = true;
+		int inicial = 0;
+		int fin = this.database.size()-1;
+		int cont;
+		while(inicial <= end) {
+			cont = (fin + inicial)/2;
+			if (matricula.compareTo(database.get(pos).getMatricula()) > 0) {
+				inicio = pos + 1;
+			} else if (matricula.compareTo(database.get(pos).getMatricula()) == 0) {
+				return cont;
+			} else {
+				fin = cont - 1;
 			}
 		}
-		if (!aux) {
-			return -1;
-		} else {
-			return i - 1;
+		return -1;
 		}
 	}
-
+	
 	public void addCalificacion(String nombre, String matricula, int nota) throws CalificacionAlreadyExistsException {
 		if (buscarMatricula(matricula) == -1) {
 			Calificacion add = new Calificacion(nombre, matricula, nota);
