@@ -55,7 +55,7 @@ public interface ActaNotas {
 	 * should be sorted from smaller to bigger values (using cmp).
 	 * @return a sorted list of the calificacions in the database.
 	 */
-	IndexedList<Calificacion> getCalificaciones(Comparator<Calificacion> cmp);
+	public IndexedList<Calificacion> getCalificaciones(Comparator<Calificacion> cmp);
 
 	/**
 	 * Returns a list with the calificacions that have a nota greater
@@ -64,5 +64,5 @@ public interface ActaNotas {
 	 * list has to be sorted. This method should NOT remove calificaciones
 	 * from the database.
 	 */
-	IndexedList<Calificacion> getAprobados(int notaMinima);
+	public IndexedList<Calificacion> getAprobados(int notaMinima);
 }

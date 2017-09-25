@@ -11,7 +11,6 @@
 
 package aed.actasnotas;
 
-import aed.actasnotas.*;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.lang.management.ManagementFactory;
@@ -33,7 +32,7 @@ public class TesterLab1 {
   static ActaNotasAED actaNotasAED = null;
 
   public static void main(String[] args) {
-	  System.out.println("dsaf");
+
     try {
 	String[] ids = ManagementFactory.getRuntimeMXBean().getName().split("@");
 	BufferedWriter bw = new BufferedWriter(new FileWriter("pid"));
