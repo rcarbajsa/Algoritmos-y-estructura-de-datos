@@ -11,20 +11,21 @@ public class ActaNotasAED implements ActaNotas {
 	}
 
 	private int buscarMatricula(String matricula) {
-			int ini = 0;
-			int fin = this.database.size() - 1;
-			int cont;
-			while (ini <= fin) {
-				cont = (ini + fin) / 2;
-				if (database.get(cont).getMatricula().compareTo(matricula) == 0) {
-					return cont;
-				} else if (database.get(cont).getMatricula().compareTo(matricula) > 0) {
-					fin = cont - 1;
-				} else {
-					ini = cont + 1;
-				}
+		getCalificaciones(new MatriculaComparator());
+		int ini = 0;
+		int fin = this.database.size() - 1;
+		int cont;
+		while (ini <= fin) {
+			cont = (ini + fin) / 2;
+			if (database.get(cont).getMatricula().compareTo(matricula) == 0) {
+				return cont;
+			} else if (database.get(cont).getMatricula().compareTo(matricula) > 0) {
+				fin = cont - 1;
+			} else {
+				ini = cont + 1;
 			}
-			return -1;
+		}
+		return -1;
 	}
 
 	public void addCalificacion(String nombre, String matricula, int nota) throws CalificacionAlreadyExistsException {
@@ -35,7 +36,6 @@ public class ActaNotasAED implements ActaNotas {
 			} else {
 				database.add(database.size() - 1, add);
 			}
-			getCalificaciones(new MatriculaComparator());
 		} else {
 			throw new CalificacionAlreadyExistsException();
 		}
@@ -71,7 +71,7 @@ public class ActaNotasAED implements ActaNotas {
 		for (int i = 0; i < copy.size() - 1; i++) {
 			for (int j = i + 1; j < copy.size(); j++) {
 				if (cmp.compare(copy.get(i), copy.get(j)) > 0) {
-					//temp = copy.get(i);
+					// temp = copy.get(i);
 					temp = copy.set(i, copy.get(j));
 					copy.set(j, temp);
 				}
