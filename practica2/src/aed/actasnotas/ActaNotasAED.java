@@ -1,19 +1,12 @@
 package aed.actasnotas;
 import es.upm.aedlib.indexedlist.*;
-
 import java.util.Comparator;
 
-import aed.actasnotas.*;
 
-public class ActasNotasAED implements ActaNotas {
-	private String nombre, matricula;
-	private int nota;
+public class ActaNotasAED implements ActaNotas {
 	private IndexedList<Calificacion> database;
 	
-	public ActasNotasAED(String nombre, String matricula, int nota, IndexedList<Calificacion> database) {
-			this.nombre = nombre;
-			this.matricula = matricula;
-			this.nota = nota;
+	public ActaNotasAED() {
 			this.database = new ArrayIndexedList<Calificacion>();
 	}
 	
@@ -23,7 +16,6 @@ public class ActasNotasAED implements ActaNotas {
 		for( i=0;i<database.size()&&aux==false;i++) {
 			if(database.get(i).getMatricula().equals(matricula)) {
 		        aux=true;
-				database.get(i).setNota(nota);
 			}
 		}
 		if(!aux) {return -1;}
