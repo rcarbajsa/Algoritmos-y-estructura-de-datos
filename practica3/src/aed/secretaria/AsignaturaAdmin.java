@@ -141,10 +141,12 @@ public class AsignaturaAdmin {
 		}
 		int ret = 0;
 		for(Position<Pair<String, Integer>> cont= notas.first(); cont != null; cont = notas.next(cont)) {
-			if(cont.element().getLeft().equals(matricula) && cont.element().getRight() != null) {
-				ret = cont.element().getRight();
-			}else {
-				throw new InvalidMatriculaException();
+			if(cont.element().getLeft().equals(matricula)){
+				if(cont.element().getRight() != null) {
+					ret = cont.element().getRight();
+				}else {
+					throw new InvalidMatriculaException();
+				}
 			}
 		}
 		return ret;
