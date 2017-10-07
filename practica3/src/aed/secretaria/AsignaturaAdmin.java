@@ -118,15 +118,15 @@ public class AsignaturaAdmin {
 	public boolean tieneNota(String matricula) throws InvalidMatriculaException {
 		if(estaMatriculado(matricula)==false) {
 			throw new InvalidMatriculaException();
-		}else {
-			boolean resultado=false;
-			for(Position<Pair<String,Integer>> aux=notas.first();aux!=null;aux=notas.next(aux)) {
-				if(aux.element().getRight()!=null) {
-					resultado=true;
-				}
-			}
-			return resultado;
 		}
+		boolean resultado=false;
+		for(Position<Pair<String,Integer>> aux=notas.first();aux!=null;aux=notas.next(aux)) {
+			if(aux.element().getLeft().equals(matricula)
+					&& aux.element().getRight()!=null) {
+				resultado=true;
+			}
+		}
+		return resultado;
 	}
 
 	/**
@@ -176,7 +176,7 @@ public class AsignaturaAdmin {
 	public PositionList<String> alumnosEnRango(int minNota, int maxNota) {
 		PositionList<String> ret = new NodePositionList<String>();
 		for(Position<Pair<String, Integer>> cont= notas.first();cont != null; cont = notas.next(cont)) {
-			if(cont.element().getRight() != null && minNota <= cont.element().getRight() && cont.element().getRight() <= maxNota) {
+			if( cont.element().getRight() != null && minNota <= cont.element().getRight() && cont.element().getRight() <= maxNota) {
 				ret.addLast(cont.element().getLeft());
 			}
 		}
@@ -192,16 +192,19 @@ public class AsignaturaAdmin {
 	 */
 	public double notaMedia() {
 		double ret = 0;
+		int num = 0;
+		System.out.println(notas.toString());
 		for(Position<Pair<String, Integer>> cont= notas.first(); cont != null; cont = notas.next(cont)) {
 			if(cont.element().getRight() != null) {
 				ret += cont.element().getRight();
+				num ++;
 			}
 		}
-		if(notas.size() == 0) {
+		System.out.println(ret);
+		if(num == 0) {
 			return 0;
 		}else {
-			return ret/notas.size();
+			return ret/num;
 		}
-			
 	}
 }
