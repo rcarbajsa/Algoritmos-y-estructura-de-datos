@@ -143,4 +143,8 @@ public class AsignaturaAdmin {
 			return ret / num;
 		}
 	}
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 8a2b9313bc4cbad42825a9cf1b6dda538420de0b
