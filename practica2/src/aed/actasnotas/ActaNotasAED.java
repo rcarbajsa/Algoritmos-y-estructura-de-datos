@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 	package aed.actasnotas;
 	
 	import es.upm.aedlib.indexedlist.*;
@@ -73,16 +72,11 @@ public class ActaNotasAED implements ActaNotas {
 			Calificacion add = new Calificacion(nombre, matricula, nota);
 			if (database.isEmpty()) {
 				database.add(0, add);
->>>>>>> 121a3b2532b699229d7556c061f516772c1f338c
 			} else {
 				throw new CalificacionAlreadyExistsException();
 			}
-<<<<<<< HEAD
-=======
-		} else {
-			throw new CalificacionAlreadyExistsException();
->>>>>>> 121a3b2532b699229d7556c061f516772c1f338c
 		}
+	}
 	
 		public void updateNota(String matricula, int nota) throws InvalidMatriculaException {
 			if (buscarMatricula(matricula) == -1) {
@@ -91,24 +85,14 @@ public class ActaNotasAED implements ActaNotas {
 				database.get(buscarMatricula(matricula)).setNota(nota);
 			}
 		}
-<<<<<<< HEAD
-	
-		public void deleteCalificacion(String matricula) throws InvalidMatriculaException {
-			if (buscarMatricula(matricula) == -1 || database.isEmpty()) {
-				throw new InvalidMatriculaException();
-			} else {
-				database.removeElementAt(buscarMatricula(matricula));
-			}
-=======
-	}
 
 	public void deleteCalificacion(String matricula) throws InvalidMatriculaException {
 		if (buscarMatricula(matricula) == -1 || database.isEmpty()) {
 			throw new InvalidMatriculaException();
 		} else {
 			database.removeElementAt(buscarMatricula(matricula));
->>>>>>> 121a3b2532b699229d7556c061f516772c1f338c
-		}
+		}b
+	}
 	
 		public Calificacion getCalificacion(String matricula) throws InvalidMatriculaException {
 			if (buscarMatricula(matricula) == -1) {
@@ -117,7 +101,6 @@ public class ActaNotasAED implements ActaNotas {
 				return database.get(buscarMatricula(matricula));
 			}
 		}
-<<<<<<< HEAD
 	
 		public IndexedList<Calificacion> getCalificaciones(Comparator<Calificacion> cmp) {
 			IndexedList<Calificacion> copy = database;
@@ -129,24 +112,11 @@ public class ActaNotasAED implements ActaNotas {
 						temp = copy.set(i, copy.get(j));
 						copy.set(j, temp);
 					}
-=======
-	}
-
-	public IndexedList<Calificacion> getCalificaciones(Comparator<Calificacion> cmp) {
-		IndexedList<Calificacion> copy = database;
-		Calificacion temp;
-		for (int i = 0; i < copy.size() - 1; i++) {
-			for (int j = i + 1; j < copy.size(); j++) {
-				if (cmp.compare(copy.get(i), copy.get(j)) > 0) {
-					// temp = copy.get(i);
-					temp = copy.set(i, copy.get(j));
-					copy.set(j, temp);
->>>>>>> 121a3b2532b699229d7556c061f516772c1f338c
 				}
 			}
 			return copy;
-		}
-	
+	}
+
 		public IndexedList<Calificacion> getAprobados(int notaMinima) {
 			int cont = 0;
 			IndexedList<Calificacion> aprobados = new ArrayIndexedList<Calificacion>();
@@ -157,11 +127,4 @@ public class ActaNotasAED implements ActaNotas {
 				}
 			}
 			return aprobados;
-		}
-<<<<<<< HEAD
-	}
-=======
-		return aprobados;
-	}
 }
->>>>>>> 121a3b2532b699229d7556c061f516772c1f338c
