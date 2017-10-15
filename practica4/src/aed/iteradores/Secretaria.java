@@ -46,12 +46,7 @@ public class Secretaria {
 	 */
 	public Iterable<String> matricular(String asignatura, Iterable<String> matriculas)
 			throws InvalidAsignaturaException {
-		if(findAsignatura(asignatura) == null) {
-			throw new InvalidAsignaturaException();
-		}else {
-			return getAsignatura(asignatura).matricular(matriculas);
-		}
-		
+		return getAsignatura(asignatura).matricular(matriculas);
 	}
 
 	/**
@@ -65,11 +60,7 @@ public class Secretaria {
 	 */
 	public Iterable<String> desMatricular(String asignatura, Iterable<String> matriculas)
 			throws InvalidAsignaturaException {
-		if(findAsignatura(asignatura) == null) {
-			throw new InvalidAsignaturaException();
-		}else {
-			return getAsignatura(asignatura).desMatricular(matriculas);
-		}
+		return getAsignatura(asignatura).desMatricular(matriculas);
 	}
 
 	/**
@@ -84,23 +75,21 @@ public class Secretaria {
 		int sig = 0;
 		Iterator<AsignaturaAdmin> it = asignaturas.iterator();
 		AsignaturaAdmin asig = null;
-		while(it.hasNext()) {
+		while (it.hasNext()) {
 			asig = it.next();
 			try {
-				if(asig.estaMatriculado(matricula) && asig.tieneNota(matricula)){
-					media += asig.notaMedia();
-					sig ++;
-					
+				if (asig.estaMatriculado(matricula) && asig.tieneNota(matricula)) {
+					media += asig.getNota(matricula);
+					sig++;
 				}
-			}catch(InvalidMatriculaException e){
-				//Asignatura que no tiene secretaria
+			} catch (InvalidMatriculaException e) {
+				// Asignatura que no tiene secretaria
 			}
 		}
-		System.err.println(media);
-		if(sig == 0) {
+		if (sig == 0) {
 			return 0;
-		}else {
-			return (media/=sig);
+		} else {
+			return (media /= sig);
 		}
 	}
 
@@ -114,23 +103,19 @@ public class Secretaria {
 	 * @return el nombre de la asignatura con la mejor nota media.
 	 */
 	public String mejorNotaMedia() {
-		double media = 0.0;
+		double media = 0;
 		String ret = null;
 		Iterator<AsignaturaAdmin> it = asignaturas.iterator();
 		AsignaturaAdmin asig = null;
-		asig = it.next();
-		try {
-			while (it.hasNext() && asig.tieneNota(asig.getNombreAsignatura())){
-				AsignaturaAdmin admin = it.next();
-				if(admin.notaMedia() > media) {
-					media += admin.notaMedia();
-					ret = admin.getNombreAsignatura();
-				}
-				asig = it.next();
-				it.next();
+		while (it.hasNext()) {
+			asig = it.next();
+			if (asig.notaMedia() > media) {
+				media = asig.notaMedia();
+				ret = asig.getNombreAsignatura();
 			}
-		} catch (InvalidMatriculaException e) {
-			//Salta error, porque la asignatura no pertenece a secretaria.
+		}
+		if (media == 0) {
+			return null;
 		}
 		return ret;
 	}
@@ -141,11 +126,20 @@ public class Secretaria {
 	 * 
 	 * @return una coleccion de pares de las notas de la matricula en todas las
 	 *         asignaturas.
+	 * @throws InvalidMatriculaException
 	 */
-	public Iterable<Pair<String, Integer>> expediente(String matricula) {
-		PositionList<Pair<String, Integer>> ret =  new NodePositionList<Pair<String, Integer>>();
-		
-		return null;
+	public Iterable<Pair<String, Integer>> expediente(String matricula) throws InvalidMatriculaException {
+		PositionList<Pair<String, Integer>> ret = new NodePositionList<Pair<String, Integer>>();
+		Iterator<AsignaturaAdmin> it = asignaturas.iterator();
+		AsignaturaAdmin asig = null;
+		while (it.hasNext()) {
+			try {
+				asig = it.next();
+				ret.addLast(new Pair<String, Integer>(asig.getNombreAsignatura(), asig.getNota(matricula)));
+			} catch (Exception e) {
+			}
+		}
+		return ret;
 	}
 
 	/**
@@ -161,8 +155,27 @@ public class Secretaria {
 	 *         tienen ningún alumno en comun.
 	 */
 	public Iterable<Pair<String, String>> asignaturasNoConflictivas() {
-		// Completar este metodo
-		return null;
+		PositionList<Pair<String, String>> ret = new NodePositionList<Pair<String, String>>();
+		Iterator<AsignaturaAdmin> it1 = asignaturas.iterator();
+		Iterator<AsignaturaAdmin> it2 = asignaturas.iterator();
+		AsignaturaAdmin asig1 = null;
+		AsignaturaAdmin asig2 = null;
+		if(it2.hasNext()) {
+			asig2=it2.next();
+		}
+		while(it1.hasNext()) {
+			asig1=it1.next();
+			while(it2.hasNext()) {
+				asig2=it2.next();
+				if(!compartenAlumnos(asig1, asig2)){
+					System.out.println(asig1.getNombreAsignatura() +  asig2.getNombreAsignatura());
+					ret.addLast(new Pair<String, String>(asig1.getNombreAsignatura(), asig2.getNombreAsignatura()));
+				}
+			}
+			it2=it1;
+		}
+		System.out.println("_______");
+		return ret;
 	}
 
 	/**
@@ -174,14 +187,29 @@ public class Secretaria {
 		boolean bool = false;
 		Iterator<String> matriculados1 = a1.matriculados().iterator();
 		Iterator<String> matriculados2 = a2.matriculados().iterator();
-		while(matriculados1.hasNext() &&  !bool) {
-			while(matriculados2.hasNext() && !bool) {
-				if(matriculados1.toString().equals(matriculados2.toString())) {
+		String asig1 = null;
+		String asig2 = null;
+		String temp = null;
+		boolean stop = false;
+		while(matriculados1.hasNext() && matriculados2.hasNext() && !bool) {
+			asig1=matriculados1.next();
+			asig2=matriculados2.next();
+			if(asig1 == null || asig2 == null) {
+				bool = true;
+			}
+			while(!bool && !stop) {
+				if (asig2.equals(asig1)) {
 					bool = true;
 				}
-				matriculados2.next();
+				if(matriculados1.hasNext()) {
+					asig1=matriculados1.next();
+				}else{
+					stop = true;
+				}
 			}
-			matriculados1.next();
+			stop = false;
+			asig1= temp;
+			
 		}
 		return bool;
 	}
