@@ -194,9 +194,6 @@ public class Secretaria {
 		while(matriculados1.hasNext() && matriculados2.hasNext() && !bool) {
 			asig1=matriculados1.next();
 			asig2=matriculados2.next();
-			if(asig1 == null || asig2 == null) {
-				bool = true;
-			}
 			while(!bool && !stop) {
 				if (asig2.equals(asig1)) {
 					bool = true;
