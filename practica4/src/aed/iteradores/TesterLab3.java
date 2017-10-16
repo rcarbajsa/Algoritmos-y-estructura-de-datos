@@ -2554,7 +2554,8 @@ public class TesterLab3 {
       asignaturaMatriculas = new ArrayIndexedList<String>() ;
       asignatura.matricular(asignaturaMatriculas) ;
       asignatura = new AsignaturaAdmin("Programacion II") ;
-      secretaria.add(0,asignatura) ;
+      secretaria.add(0,asignatura);
+
       try
       {
           asignaturaMatriculas = new ArrayIndexedList<String>() ;
