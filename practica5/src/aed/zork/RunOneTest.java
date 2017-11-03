@@ -1,7 +1,7 @@
-package aed.laberinto;
+package aed.zork;
 
 public class RunOneTest {
   public static void main(String args[]) {
-    TesterInd4.test_12();
+    TesterLab4.test_4();
   }
 }
