@@ -20,31 +20,22 @@ public class Huffman {
 			String cursor = paths[i].getCode();
 			Character letra = paths[i].getCh();
 			Position<Character> pos = huffmanTree.root();
-			if (cursor.length() == 1) {
-				Position<Character> raiz = huffmanTree.root();
-				if (cursor.charAt(0) == '1') {
-					huffmanTree.insertRight(raiz, letra);
+			for (int j = 0; j < cursor.length(); j++) {
+				if (cursor.charAt(j) == '1') {
+					if (!huffmanTree.hasRight(pos)) {
+						huffmanTree.insertRight(pos, ' ');
+					}
+					pos = huffmanTree.right(pos);
+					if (j + 1 == cursor.length()) {
+						huffmanTree.set(pos, letra);
+					}
 				} else {
-					huffmanTree.insertLeft(raiz, letra);
-				}
-			} else {
-				for (int j = 0; j < cursor.length(); j++) {
-					if (cursor.charAt(j) == '1') {
-						if (!huffmanTree.hasRight(pos)) {
-							huffmanTree.insertRight(pos, (char) 32);
-						}
-						pos = huffmanTree.right(pos);
-						if (j + 1 == cursor.length()) {
-							huffmanTree.set(pos, letra);
-						}
-					} else {
-						if (!huffmanTree.hasLeft(pos)) {
-							huffmanTree.insertLeft(pos, (char) 32);
-						}
-						pos = huffmanTree.left(pos);
-						if (j + 1 == cursor.length()) {
-							huffmanTree.set(pos, letra);
-						}
+					if (!huffmanTree.hasLeft(pos)) {
+						huffmanTree.insertLeft(pos, ' ');
+					}
+					pos = huffmanTree.left(pos);
+					if (j + 1 == cursor.length()) {
+						huffmanTree.set(pos, letra);
 					}
 				}
 			}
@@ -72,11 +63,8 @@ public class Huffman {
 					}
 					v = w;
 				}
-				return line;
 			} else if (tree.isInternal(v)) {
 				line += findCharacterCode(ch, tree, v);
-			} else {
-				pos = tree.root();
 			}
 		}
 		return line;
