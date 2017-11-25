@@ -137,8 +137,9 @@ public class Huffman {
 			} else if (tree.isInternal(v)) {
 				findCharacterCode(ch, tree, v, path);
 			}
-			return line;
+			
 		}
+    	return line;
     }
 
 
