@@ -24,8 +24,11 @@ public class Cache<Key,Value> {
 	  if(storage.read(key) == null){
 		  lru.addFirst(key);
 	  }else {
-		 res = storage.read(key); 
-		 CacheCell cell = new CacheCell<key, res>;
+		 res = storage.read(key);
+		 lru.addFirst(key);
+		 CacheCell cell = new CacheCell<Key, Value>(res,false,lru.first());
+		 map.put(key, cell);
+		  
 	  }
     return res;
   }
@@ -34,4 +37,3 @@ public class Cache<Key,Value> {
     // CAMBIA este metodo
   }
 }
-
