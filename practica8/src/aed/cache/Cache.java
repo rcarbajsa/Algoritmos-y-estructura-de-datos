@@ -19,16 +19,15 @@ public class Cache<Key,Value> {
   }
   
   public Value get(Key key) {
-	  System.out.println(key.toString());
-	  if(map.get(key) == null){
+	  System.out.println(map.get(key));
+	  Value res = null;
+	  if(storage.read(key) == null){
 		  lru.addFirst(key);
-		  System.out.println("______asd");
 	  }else {
-		  Value a = storage.read(key);
-		  System.out.println(a.toString()+"_____");
-		  
+		 res = storage.read(key); 
+		 CacheCell cell = new CacheCell<key, res>;
 	  }
-    return null;
+    return res;
   }
   
   public void put(Key key, Value value) {
